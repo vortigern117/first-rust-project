@@ -1,4 +1,5 @@
 use std::io::Read;
+use std::process;
 
 struct Task
 {
@@ -14,29 +15,46 @@ fn add_tasks(task_vector: &mut Vec<String>)
     task_vector.push(task_name);
 }
 
-fn view_tasks()
+fn view_tasks(task_vector: &mut Vec<String>)
 {
-    println!("placeholder");
+    for item in task_vector
+    {
+        println!("{}", item);
+    }
+}
+
+fn remove_tasks(task_vector: &mut Vec<String>)
+{
+    println!("Which task would you like to remove?");
+    for (i, item) in task_vector.iter().enumerate()
+    {
+        println!("{}: {}", i+1, item);
+    }
 }
 
 fn menu()
 {
-    println!("1. Add tasks\n2. View tasks");
+    println!("1. Add tasks\n2. View tasks\n3. Remove tasks\n4. Exit");
 }
 
 fn main() 
 {
     let mut task_vector: Vec<String> = Vec::new();
 
-    menu();
-    let mut user_input = String::new();
-    std::io::stdin().read_line(&mut user_input).expect("failed");
-    println!("selected {}", user_input);
-
-    match user_input.trim()
+    loop
     {
-        "1"=>add_tasks(&mut task_vector),
-        "2"=>view_tasks(),
-        _ => println!("invalid"),
+        menu();
+        let mut user_input = String::new();
+        std::io::stdin().read_line(&mut user_input).expect("failed");
+        println!("selected {}", user_input);
+
+        match user_input.trim()
+        {
+            "1"=>add_tasks(&mut task_vector),
+            "2"=>view_tasks(&mut task_vector),
+            "3"=>remove_tasks(&mut task_vector),
+            "4"=>process::exit(0),
+            _ => println!("invalid"),
+        }
     }
 }
